@@ -2,8 +2,9 @@
 #  -*- coding: utf-8 -*-
 __author__ = "Varun Nayyar <nayyarv@gmail.com>"
 
-import pandas as pd
 import os
+
+import pandas as pd
 
 from util import cachedir
 from util.info import STATES
@@ -16,13 +17,14 @@ def grouper(tsdf):
             grn = pollGroup[pollGroup.PartyAb == "GRN"].OrdinaryVotes.sum()
             alp = pollGroup[pollGroup.PartyAb == "ALP"].OrdinaryVotes.sum()
             lib = pollGroup[pollGroup.PartyAb == "LP"].OrdinaryVotes.sum()
-            other = (total) - (grn + alp + lib)
+            lib += pollGroup[pollGroup.PartyAb == "CLP"].OrdinaryVotes.sum()
+            other = total - (grn + alp + lib)
             yield divID, polid, grn, alp, lib, other, total
 
 
-def main():
+def main(state_list=STATES):
     year = 2016
-    for state in STATES:
+    for state in state_list:
         print(f"Processing {state}")
         fpp = os.path.join(cachedir, "data", "{year}", "{state}", "houseFPP")
         tsdf = pd.read_csv(fpp.format(year=year, state=state), skiprows=1)
@@ -50,5 +52,6 @@ def sa1_pp_json():
         with open(os.path.join(cachedir, "processedData", f"sa1-pp-{state}-2016.json"), 'w') as f:
             ujson.dump(sa1_pp, f)
 
+
 if __name__ == '__main__':
-    sa1_pp_json()
+    main(["WA"])

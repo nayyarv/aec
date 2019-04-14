@@ -1,6 +1,6 @@
 #  -*- coding: utf-8 -*-
 __author__ = "Varun Nayyar <nayyarv@gmail.com>"
-STATES = {"NSW", "VIC", "QLD", "SA", "TAS", "ACT", "NT"}
+STATES = {"NSW", "VIC", "QLD", "SA", "TAS", "ACT", "NT", "WA"}
 
 # map year to aec code
 YRMAP = {
