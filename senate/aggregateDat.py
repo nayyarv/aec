@@ -7,14 +7,14 @@ import glob
 import collections
 import pandas as pd
 
-from senate.info import YRMAP, STATES
+from util.info import YRMAP, STATES
 
 YEARS = YRMAP.keys()
 
 cachedir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".cache"))
 
 procDir = os.path.join(cachedir, "processedData")
-FGLOB = os.path.join(cachedir, "data/{year}/{state}/*.csv")
+FGLOB = os.path.join(cachedir, "data/{year}/{state}/Senate*.csv")
 
 
 

@@ -4,5 +4,5 @@
 cd ..
 senate/downloader.py
 sed -i '$ d' data/*/*/*.csv
-senate/aggregateDat.py
+util/aggregateDat.py
 cd senate
