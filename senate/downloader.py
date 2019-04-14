@@ -4,6 +4,7 @@
 __author__ = "Varun Nayyar <nayyarv@gmail.com>"
 
 import wget
+import os
 import zipfile
 
 from typing import Set
@@ -11,6 +12,8 @@ from senate.info import STATES, YRMAP
 
 AEC_SENATE_BASE = "https://results.aec.gov.au/{yrid}/Website/External/SenateStateFirstPrefsByPollingPlaceDownload-{yrid}-{state}.zip"
 
+cachedir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".cache"))
+rawdir = os.path.join(cachedir, "data")
 
 def download_zips(years: Set[int], states: Set[str]):
     if not years:
@@ -28,10 +31,10 @@ def download_zips(years: Set[int], states: Set[str]):
         for state in states:
             print(f"Downloading zip for {state}:{year}")
             wget.download(AEC_SENATE_BASE.format(state=state, yrid=YRMAP[year]),
-                          f"data/zip/senate_{state}_{year}.zip")
+                          f"{rawdir}/zip/senate_{state}_{year}.zip")
             print("Unzipping")
-            with zipfile.ZipFile(f"data/zip/senate_{state}_{year}.zip") as zf:
-                zf.extractall(f"data/{year}/{state}")
+            with zipfile.ZipFile(f"{rawdir}/zip/senate_{state}_{year}.zip") as zf:
+                zf.extractall(f"{rawdir}/{year}/{state}")
 
 
 if __name__ == '__main__':

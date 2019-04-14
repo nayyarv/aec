@@ -1,5 +1,4 @@
-data/
-processedData/
+.cache/
 *.zip
 
 .ipynb_checkpoints

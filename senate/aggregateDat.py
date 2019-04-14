@@ -2,6 +2,7 @@
 #  -*- coding: utf-8 -*-
 __author__ = "Varun Nayyar <nayyarv@gmail.com>"
 
+import os
 import glob
 import collections
 import pandas as pd
@@ -10,7 +11,11 @@ from senate.info import YRMAP, STATES
 
 YEARS = YRMAP.keys()
 
-FGLOB = "data/{year}/{state}/*.csv"
+cachedir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".cache"))
+
+procDir = os.path.join(cachedir, "processedData")
+FGLOB = os.path.join(cachedir, "data/{year}/{state}/*.csv")
+
 
 
 def get_file(year, state):
@@ -63,7 +68,7 @@ def main(states=STATES):
 
         combed = pd.concat([basedf, percdf], axis=1)
         print(f"Writing {state} to processedData/senate_greens_{state}.csv")
-        combed.to_csv(f"processedData/senate_greens_{state}.csv", index=False)
+        combed.to_csv(f"{procDir}/senate_greens_{state}.csv", index=False)
 
 
 if __name__ == '__main__':
