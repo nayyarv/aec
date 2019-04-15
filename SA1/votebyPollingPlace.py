@@ -6,7 +6,11 @@ import os
 
 import pandas as pd
 
-from util import cachedir
+import sys
+fp = os.path.abspath(os.path.join(__file__, "..", ".."))
+sys.path.insert(0, fp)
+
+from util.base import cachedir
 from util.info import STATES
 
 
@@ -18,6 +22,8 @@ def grouper(tsdf):
             alp = pollGroup[pollGroup.PartyAb == "ALP"].OrdinaryVotes.sum()
             lib = pollGroup[pollGroup.PartyAb == "LP"].OrdinaryVotes.sum()
             lib += pollGroup[pollGroup.PartyAb == "CLP"].OrdinaryVotes.sum()
+            lib += pollGroup[pollGroup.PartyAb == "NP"].OrdinaryVotes.sum()
+            lib += pollGroup[pollGroup.PartyAb == "LNP"].OrdinaryVotes.sum()
             other = total - (grn + alp + lib)
             yield divID, polid, grn, alp, lib, other, total
 
@@ -28,10 +34,11 @@ def main(state_list=STATES):
         print(f"Processing {state}")
         fpp = os.path.join(cachedir, "data", "{year}", "{state}", "houseFPP")
         tsdf = pd.read_csv(fpp.format(year=year, state=state), skiprows=1)
-
+        dest = os.path.join(cachedir, "processedData")
+        os.makedirs(dest, exist_ok=True)
         simplified = pd.DataFrame.from_records(
             grouper(tsdf), columns=["divID", "polid", "grn", "alp", "lib", "other", "total"])
-        simplified.to_csv(os.path.join(cachedir, "processedData", f"housefpp_{state}_{year}.csv"))
+        simplified.to_csv(os.path.join(dest, f"housefpp_{state}_{year}.csv"))
 
 
 def sa1_pp_json():
@@ -40,6 +47,7 @@ def sa1_pp_json():
     print("Reading excel file")
     df = pd.read_excel(sa1info)
     print("Finished reading the excel file")
+    os.makedirs(os.path.join(cachedir, "processedData"), exist_ok=True)
     for state, statedf in df.groupby("state_ab"):
         print(f"Collating {state}")
         sa1_pp = {}
@@ -54,4 +62,4 @@ def sa1_pp_json():
 
 
 if __name__ == '__main__':
-    main(["WA"])
+    main(["QLD"])

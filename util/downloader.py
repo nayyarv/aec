@@ -40,6 +40,7 @@ def download_csvs(house, years, states):
         for state in states:
             dl = AEC_DL.format(house=webHouse, state=state, yrid=YRMAP[year], ftype="csv",
                                loc="Downloads")
+            os.makedirs(f"{RAW_DIR}/{year}/{state}", exist_ok=True)
             dest = f"{RAW_DIR}/{year}/{state}/houseFPP"
             print(f"Downloading csv for {state}:{year} to {dest}")
             print(dl)

@@ -10,8 +10,12 @@ import os
 
 import pandas as pd
 
+import sys
+fp = os.path.abspath(os.path.join(__file__, "..", ".."))
+sys.path.insert(0, fp)
+
 from util.info import STATES
-from util import procdir
+from util.base import procdir
 
 
 def sa1_pp_mapper(state):
